@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'KI-Debug für Klipper — Fehler auslesen, Fix generieren, zurückspielen. In Minuten, nicht in Stunden.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="de" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-io-bg text-io-text antialiased">
+    <slot />
+    <footer class="border-t border-io-border mt-24">
+      <div class="mx-auto max-w-5xl px-6 py-10 text-sm text-io-muted flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+        <p class="font-mono">mThreeD.iO &middot; input/output &middot; in Ordnung</p>
+        <p>Ein Service aus Pirna, Sachsen</p>
+        <nav class="flex gap-4">
+          <a href="/impressum" class="hover:text-io-text">Impressum</a>
+          <a href="/datenschutz" class="hover:text-io-text">Datenschutz</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

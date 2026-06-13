@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  /* mThreeD.iO — dunkles Technik-Thema, Akzent = Klipper-ready-Grün */
+  --color-io-bg: #0d1117;
+  --color-io-panel: #161b22;
+  --color-io-border: #30363d;
+  --color-io-text: #e6edf3;
+  --color-io-muted: #8b949e;
+  --color-io-green: #3fb950;
+  --color-io-red: #f85149;
+  --font-mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, monospace;
+}

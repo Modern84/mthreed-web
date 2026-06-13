@@ -1,0 +1,182 @@
+---
+import Base from '../layouts/Base.astro';
+
+const drucker = [
+  'ProForge 5 (Makertech 3D)',
+  'Voron 0.2, Trident, V2.4, Switchwire, Legacy',
+  'Sovol SV08, SV07, SV06 ACE',
+  'Troodon 2.0 (Fombot)',
+  'Prusa MK4 / MK3.9 mit Klipper-Mod',
+  'Jeder Custom-Build mit Klipper + Moonraker + Mainsail/Fluidd',
+];
+
+const faehigkeiten = [
+  'CAN-Bus-Probleme erkennen (EBB36, U2C, UUID-Mismatch, Timer-too-close)',
+  'Config-Fehler in printer.cfg finden und korrigieren',
+  'Flash-Issues diagnostizieren (DFU, Bootloader, Firmware-Mismatch)',
+  'Input-Shaper-Kalibrierung durchgehen',
+  'Pressure Advance, PID, Eddy-Probe-Setup',
+  'Log-Analyse für MCU-Timeouts, Thermal Runaways, Stepper-Fehler',
+  'Commissioning-Doku mitliefern — pro Session ein Markdown-Log für dein Archiv',
+];
+---
+
+<Base title="mThreeD.iO — KI-Debug für Klipper-Drucker">
+  <!-- Above the fold -->
+  <section class="mx-auto max-w-5xl px-6 pt-20 pb-16 text-center">
+    <p class="font-mono text-io-green text-sm mb-6">$ mthreed.io --debug</p>
+    <h1 class="text-5xl sm:text-6xl font-bold tracking-tight">Drucker nicht i.O.?</h1>
+    <p class="mt-6 text-xl text-io-muted max-w-2xl mx-auto">
+      KI-Debug für Klipper — Fehler auslesen, Fix generieren, zurückspielen.
+      <span class="text-io-text">In Minuten, nicht in Stunden.</span>
+    </p>
+    <div class="mt-10">
+      <a
+        href="mailto:beta@mthreed.io?subject=Beta-Zugang%20mThreeD.iO&body=Mein%20Drucker%3A%20%0AMein%20Problem%3A%20"
+        class="inline-block rounded-md bg-io-green px-8 py-3 font-semibold text-io-bg hover:opacity-90 transition"
+      >Beta-Zugang sichern</a>
+      <p class="mt-3 text-sm text-io-muted">Die ersten fünf Beta-Plätze sind kostenlos — gegen ehrliches Feedback.</p>
+    </div>
+
+    <!-- Visueller Anker: Split-Screen vorher/nachher -->
+    <div class="mt-16 grid sm:grid-cols-[1fr_auto_1fr] items-center gap-4 text-left">
+      <div class="rounded-lg border border-io-border bg-io-panel overflow-hidden">
+        <div class="flex items-center gap-2 border-b border-io-border px-4 py-2">
+          <span class="h-3 w-3 rounded-full bg-io-red"></span>
+          <span class="font-mono text-xs text-io-muted">klippy.log</span>
+        </div>
+        <pre class="px-4 py-3 font-mono text-xs leading-relaxed text-io-red overflow-x-auto">mcu 'ebb': Timeout on wait for
+'can0' response
+Lost communication with MCU
+Klipper SHUTDOWN</pre>
+      </div>
+      <div class="text-center font-mono text-io-muted text-sm px-2">
+        <span class="hidden sm:inline">──&nbsp;mThreeD.iO&nbsp;──▶</span>
+        <span class="sm:hidden">▼ mThreeD.iO ▼</span>
+      </div>
+      <div class="rounded-lg border border-io-border bg-io-panel overflow-hidden">
+        <div class="flex items-center gap-2 border-b border-io-border px-4 py-2">
+          <span class="h-3 w-3 rounded-full bg-io-green"></span>
+          <span class="font-mono text-xs text-io-muted">mainsail</span>
+        </div>
+        <pre class="px-4 py-3 font-mono text-xs leading-relaxed text-io-green overflow-x-auto">canbus_uuid korrigiert
+FIRMWARE_RESTART ... ok
+7/7 MCUs verbunden
+Klipper ready</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sektion 1 — Was es ist -->
+  <section class="mx-auto max-w-3xl px-6 py-12 text-center">
+    <p class="text-lg text-io-muted leading-relaxed">
+      mThreeD.iO ist ein KI-Debug-Service für Klipper-basierte 3D-Drucker.
+      Du öffnest einen zeitlich begrenzten Tunnel, die KI liest deine Configs und Logs,
+      generiert den Fix und spielt ihn <span class="text-io-text">auf deine Bestätigung</span> zurück.
+    </p>
+  </section>
+
+  <!-- Sektion 2 — So funktioniert es -->
+  <section class="mx-auto max-w-5xl px-6 py-12">
+    <h2 class="text-2xl font-bold mb-8">So funktioniert es</h2>
+    <div class="grid gap-6 sm:grid-cols-3">
+      <div class="rounded-lg border border-io-border bg-io-panel p-6">
+        <p class="font-mono text-io-green text-sm mb-2">1</p>
+        <h3 class="font-semibold mb-2">Install-Script ausführen</h3>
+        <pre class="rounded bg-io-bg px-3 py-2 font-mono text-xs text-io-text overflow-x-auto mb-3">curl -sSL install.mthreed.io/debug | bash</pre>
+        <p class="text-sm text-io-muted">Läuft auf deinem Pi / Host. Startet einen Einmal-Tunnel.</p>
+      </div>
+      <div class="rounded-lg border border-io-border bg-io-panel p-6">
+        <p class="font-mono text-io-green text-sm mb-2">2</p>
+        <h3 class="font-semibold mb-2">Session öffnen</h3>
+        <p class="text-sm text-io-muted">Du bekommst einen Link: <span class="font-mono text-io-text">mthreed.io/session/&lt;id&gt;</span>. Gültig eine Stunde.</p>
+      </div>
+      <div class="rounded-lg border border-io-border bg-io-panel p-6">
+        <p class="font-mono text-io-green text-sm mb-2">3</p>
+        <h3 class="font-semibold mb-2">KI debuggt mit dir</h3>
+        <p class="text-sm text-io-muted">Die KI liest <span class="font-mono">printer.cfg</span>, <span class="font-mono">klippy.log</span>, <span class="font-mono">dmesg</span>, fragt gezielt nach. Zeigt dir den Fix als Diff. Du bestätigst. Fix wird eingespielt, Klipper neu gestartet, verifiziert.</p>
+        <p class="mt-3 text-sm text-io-muted">Am Ende: komplettes Session-Log als Markdown in dein Postfach.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sektion 3 — Für welche Drucker -->
+  <section class="mx-auto max-w-5xl px-6 py-12">
+    <h2 class="text-2xl font-bold mb-8">Für welche Drucker</h2>
+    <ul class="grid gap-3 sm:grid-cols-2">
+      {drucker.map((d) => (
+        <li class="flex items-start gap-3">
+          <span class="text-io-green font-mono mt-0.5">✓</span>
+          <span class="text-io-muted">{d}</span>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 text-sm text-io-muted">Nicht dabei? <a href="mailto:beta@mthreed.io?subject=Mein%20Drucker%20fehlt" class="text-io-green hover:underline">Schreib uns</a>, wir schauen.</p>
+  </section>
+
+  <!-- Sektion 4 — Was die KI kann -->
+  <section class="mx-auto max-w-5xl px-6 py-12">
+    <h2 class="text-2xl font-bold mb-8">Was die KI kann</h2>
+    <ul class="grid gap-3 sm:grid-cols-2">
+      {faehigkeiten.map((f) => (
+        <li class="flex items-start gap-3">
+          <span class="text-io-green font-mono mt-0.5">▸</span>
+          <span class="text-io-muted">{f}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Sektion 5 — Deine Daten bleiben deine -->
+  <section class="mx-auto max-w-5xl px-6 py-12">
+    <div class="rounded-lg border border-io-border bg-io-panel p-8">
+      <h2 class="text-2xl font-bold mb-6">Deine Daten bleiben deine</h2>
+      <ul class="grid gap-4 sm:grid-cols-2 text-sm text-io-muted">
+        <li><strong class="text-io-text">Wir speichern keine Zugangsdaten.</strong> Der Tunnel wird von dir gestartet, läuft über Cloudflare Zero Trust, schließt sich nach einer Stunde automatisch.</li>
+        <li><strong class="text-io-text">Jede Session ist protokolliert.</strong> Du bekommst das vollständige Log.</li>
+        <li><strong class="text-io-text">Kein Persistenzspeicher auf unserer Seite.</strong> Nach der Session ist weg, was in der Session war.</li>
+        <li><strong class="text-io-text">Keine Daten an Dritte.</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Sektion 6 — Preise -->
+  <section class="mx-auto max-w-5xl px-6 py-12">
+    <h2 class="text-2xl font-bold mb-8">Preise — Beta-Phase</h2>
+    <div class="grid gap-6 sm:grid-cols-3">
+      <div class="rounded-lg border border-io-border bg-io-panel p-6">
+        <h3 class="font-semibold">Einzel-Session</h3>
+        <p class="mt-2 text-3xl font-bold">25&nbsp;€</p>
+        <p class="mt-2 text-sm text-io-muted">Eine Stunde Tunnel, ein Problem gelöst.</p>
+      </div>
+      <div class="rounded-lg border border-io-green bg-io-panel p-6">
+        <h3 class="font-semibold">Pro Flatrate</h3>
+        <p class="mt-2 text-3xl font-bold">10&nbsp;€<span class="text-base font-normal text-io-muted">/Monat</span></p>
+        <p class="mt-2 text-sm text-io-muted">Unbegrenzte Sessions, Priority-Support.</p>
+      </div>
+      <div class="rounded-lg border border-io-border bg-io-panel p-6">
+        <h3 class="font-semibold">Community</h3>
+        <p class="mt-2 text-3xl font-bold">Sponsor</p>
+        <p class="mt-2 text-sm text-io-muted">GitHub Sponsors / Ko-fi — unterstütze das Projekt, bekomme Beta-Zugang.</p>
+      </div>
+    </div>
+    <p class="mt-6 text-sm text-io-muted">Beta-Phase: Die ersten fünf Kunden kostenlos gegen ehrliches Feedback.</p>
+  </section>
+
+  <!-- Sektion 7 — Wer steckt dahinter -->
+  <section class="mx-auto max-w-3xl px-6 py-12">
+    <h2 class="text-2xl font-bold mb-6">Wer steckt dahinter</h2>
+    <p class="text-io-muted leading-relaxed">
+      Sebastian Hartmann. 3D-Drucker-Techniker aus Sachsen, Partner von WEC
+      (Werkzeug- und Fertigungskonstruktion), selbst Klipper- und Voron-Nutzer.
+      Baut mThreeD.iO aus einem simplen Grund: weil niemand anderes diesen Service
+      macht — und weil ich meine eigenen Debugging-Sessions sowieso schon so führe.
+    </p>
+    <div class="mt-8 text-center">
+      <a
+        href="mailto:beta@mthreed.io?subject=Beta-Zugang%20mThreeD.iO&body=Mein%20Drucker%3A%20%0AMein%20Problem%3A%20"
+        class="inline-block rounded-md bg-io-green px-8 py-3 font-semibold text-io-bg hover:opacity-90 transition"
+      >Beta-Zugang sichern</a>
+    </div>
+  </section>
+</Base>
